@@ -69,7 +69,7 @@ HTTP/1.0 200 OK
                 }
                 chart.draw(data, options);
                 index++;
-            }, 250);
+            }, 100);
         }
     </script>
 </body>
@@ -101,7 +101,7 @@ def main(micropython_optimize=False):
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(addr)
     s.listen(5)
-    print("Listening, connect your browser to http://<this_host>:8080/")
+    print("Listening, connect your browser to http://<this_host>:80/")
 
     counter = 0
     while True:

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        #chart_div {
+            width: 1200px;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- CONTAINER FOR CHART -->
+    <div id="chart_div"></div>
+    <script type="text/javascript" loading="lazy" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        // load current chart package
+        google.charts.load("current", {
+            packages: ["corechart", "line"]
+        });
+        
+		var time=0;
+		var humid=0;
+		
+		// set callback function when api loaded
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            // create data object with default value
+            let data = google.visualization.arrayToDataTable([["Time","Humidity"],[10, 10]]);
+			
+            // create options object with titles, colors, etc.
+            let options = {
+                title: "Breath",
+                hAxis: {
+                    title: "Time"
+                },
+                vAxis: {
+                    title: "Humidity"
+                }
+            };
+            // draw chart on load
+            let chart = new google.visualization.LineChart(
+                document.getElementById("chart_div")
+            );
+            chart.draw(data, options);
+            // interval for adding new data every 250ms
+            let index = 0;
+            setInterval(function() {
+                // instead of this random, you can make an ajax call for the current cpu usage or what ever data you want to display
+                if(time>0 && humid>0)
+				{
+					data.addRow([time, humid]);
+					if(data.getNumberOfRows()>200)
+					{
+						data.removeRow(0);
+					}
+					chart.draw(data, options);
+					index++;
+					
+					time=0;
+					humid=0;
+				}
+            }, 10);
+        }
+        
+		/////////////////////////////
+		var ajaxRequest = new XMLHttpRequest();  
+		function ajaxLoad(ajaxURL)  
+		{  
+			ajaxRequest.open('GET',ajaxURL,true);  
+			ajaxRequest.onreadystatechange = function()  
+			{  
+				if(ajaxRequest.readyState == 4 && ajaxRequest.status==200)  
+				{  
+					var ajaxResult = ajaxRequest.responseText;  
+					var tmpArray = ajaxResult.split("|");  
+					time=parseInt(tmpArray[0]);
+					humid=parseFloat(tmpArray[1]);
+				}  
+			}  
+			ajaxRequest.send();  
+		}     
+        
+    
+     
+   function updateDHT()   
+   {   
+     ajaxLoad('getDHT');   
+   }  
+     
+   setInterval(updateDHT, 100);  
+    </script>
+     
+</body>
+</html>

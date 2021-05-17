@@ -22,21 +22,18 @@ while True:
       break
 
 
+vcc.value(1)
+time.sleep(1)
+i2c.writeto(0x44,bytearray([0x27, 0x21]))
+time.sleep(1)
+i2c.writeto(0x44,bytearray([0xE0, 0x00]))
+time.sleep(1)
 
-
-while True:
-    
-    vcc.value(1)
-    time.sleep(1)
-    i2c.writeto(0x44,bytearray([0x21, 0x30]))
-    time.sleep(1)
-    i2c.writeto(0x44,bytearray([0xE0, 0x00]))
-    time.sleep(1)
+while True:  
     tempBuf=i2c.readfrom(0x44,6)
     calcTemp=(int(tempBuf[0])*256+int(tempBuf[1]))*0.00267-45
     calcRH=(int(tempBuf[3])*256+int(tempBuf[4]))*0.001526
-    print("Temp %.2fC, RH %.2f%%"%(calcTemp,calcRH))
+    print("Temp %.2f, RH %.2f"%(calcTemp,calcRH))
     
-    vcc.value(0)
-    time.sleep(1)
+    time.sleep_ms(100)
     
