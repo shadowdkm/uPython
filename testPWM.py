@@ -1,5 +1,8 @@
-import machine
+from machine import Pin, PWM
 
-led = machine.PWM(machine.Pin(2), freq=1000)
+pwmBody = PWM(Pin(0), freq=20000, duty=512)
 
-led.duty(1)
+#given 12V 3A Max on the pwoer supply
+# PWM 500/1024 already produces full load.
+
+pwmBody.duty(100)

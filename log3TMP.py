@@ -16,7 +16,10 @@ except OSError as exc:
     print(exc.args[0])
 finally:
     print("Temp sensor inited")
-   
+
+for addr in range(0x48, 0x4B):
+    print(addr)
+    
 i2c.writeto(0x4A,bytearray([0x21, 0x30]))
 i2c.writeto(0x4A,bytearray([0xE0, 0x00]))
 
